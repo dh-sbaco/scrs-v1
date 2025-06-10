@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SCRS Marine Forecast</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; background: #eef6f9; padding: 1rem; border-radius: 8px; }
+    h1 { color: #005f73; }
+    p, small { font-size: 1.1rem; }
+    .label { font-weight: bold; }
+    button {
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>SCRS Marine Forecast</h1>
+  <button onclick="loadData()">Refresh</button>
+  <div id="content">Loading forecast...</div>
+
+  <script>
+    async function loadData() {
+      const content = document.getElementById("content");
+      content.innerHTML = "Refreshing...";
+      try {
+        const res = await fetch("data.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("Unable to load data");
+        const data = await res.json();
+        content.innerHTML = `
+          <p><span class="label">Water Temperature:</span> ${data.waterTemperature} °C</p>
+          <p><span class="label">Timestamp:</span> ${data.waterTempTimestamp}</p>
+          <h2>Forecast</h2>
+          <p><span class="label">Wind:</span> ${data.forecast.wind.speed} kts @ ${data.forecast.wind.direction}°</p>
+          <p><span class="label">Swell:</span> ${data.forecast.swell.height} ft @ ${data.forecast.swell.direction}°, ${data.forecast.swell.period} sec</p>
+          <p><small>Last updated: ${new Date(data.fetchedAtUTC).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PST</small></p>
+        `;
+      } catch (err) {
+        content.innerHTML = "Failed to load data: " + err.message;
+      }
+    }
+
+    loadData(); // initial load
+  </script>
+</body>
+</html>
