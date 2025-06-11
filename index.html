@@ -42,6 +42,17 @@
         content.innerHTML = "Failed to load data: " + err.message;
       }
     }
+const wind = data.forecast?.wind || {};
+const swell = data.forecast?.swell || {};
+
+content.innerHTML = `
+  <p><span class="label">Water Temperature:</span> ${data.waterTemperature ?? 'N/A'} °C</p>
+  <p><span class="label">Timestamp:</span> ${data.waterTempTimestamp ?? 'N/A'}</p>
+  <h2>Forecast</h2>
+  <p><span class="label">Wind:</span> ${wind.speed ?? 'N/A'} kts @ ${wind.direction ?? 'N/A'}°</p>
+  <p><span class="label">Swell:</span> ${swell.height ?? 'N/A'} ft @ ${swell.direction ?? 'N/A'}°, ${swell.period ?? 'N/A'} sec</p>
+  <p><small>Last updated: ${new Date(data.fetchedAtUTC).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PST</small></p>
+`;
 
     loadData(); // initial load
   </script>
