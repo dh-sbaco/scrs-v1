@@ -31,18 +31,19 @@ async function getMarineForecast() {
   const swellDir = marineText?.wvdir?.[0] || "N/A";
   const swellPeriod = marineText?.wvper?.[0] || "N/A";
 
-  return {
-    forecastTime: new Date().toISOString(),
-    wind: {
-      direction: windDir,
-      speed: windSpeed
-    },
-    swell: {
-      height: swellHeight,
-      direction: swellDir,
-      period: swellPeriod
-    }
-  };
+return {
+  forecastTime: new Date().toISOString(),
+  wind: {
+    direction: windDir || "N/A",
+    speed: windSpeed || "N/A"
+  },
+  swell: {
+    height: swellHeight || "N/A",
+    direction: swellDir || "N/A",
+    period: swellPeriod || "N/A"
+  }
+};
+
 }
 
 async function compileData() {
